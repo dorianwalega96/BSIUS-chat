@@ -33,7 +33,6 @@ public class SocketService {
 
     private SocketService(){
         initSocket();
-        //setListener();
     }
 
     private void initSocket(){

@@ -6,43 +6,41 @@ import Networking.SocketService;
 
 import javax.swing.*;
 import java.awt.*;
-import java.net.Socket;
 
 import static Messages.MessageType.LOGIN;
+import static Messages.MessageType.REG;
+import static Networking.SocketService.login;
+import static Networking.SocketService.register;
 
 public class MainWindow extends JFrame {
 
-    JPanel loginPanel = new JPanel();
-    JPanel registerPanel = new JPanel();
+    private JPanel loginPanel = new JPanel();
+    private JPanel registerPanel = new JPanel();
 
-    TextField username = new TextField();
-    TextField password = new TextField();
-    JButton loginButton = new JButton("Login");
+    private TextField username = new TextField();
+    private TextField password = new TextField();
+    private JButton loginButton = new JButton("Login");
 
-    TextField newUsername = new TextField();
-    TextField newPassword = new TextField();
-    TextField newPasswordRepeat = new TextField();
-    JButton registerButton = new JButton("Register");
+    private TextField newUsername = new TextField();
+    private TextField newPassword = new TextField();
+    private TextField newPasswordRepeat = new TextField();
+    private JButton registerButton = new JButton("Register");
 
-    JLabel infolabel = new JLabel("");
+    private JLabel infolabel = new JLabel("");
 
     private String loginString;
 
     private SocketService socketService;
 
-
-
     public MainWindow(){
         super("CZAT9000");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(600, 300);
+        setSize(300, 200);
         setVisible(true);
         setLayout(new FlowLayout());
 
         add(loginPanel);
         add(registerPanel);
-
-        //setupComponents();
 
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.PAGE_AXIS));
         registerPanel.setLayout(new BoxLayout(registerPanel, BoxLayout.PAGE_AXIS));
@@ -58,14 +56,12 @@ public class MainWindow extends JFrame {
 
         loginPanel.add(infolabel);
 
-
         socketService = SocketService.getInstance();
 
         loginButton.addActionListener(e -> {
             loginString = username.getText();
-            JsonMessage message = SocketService.login(new JsonMessage(LOGIN, username.getText(), password.getText()));
+            JsonMessage message = login(new JsonMessage(LOGIN, username.getText(), password.getText()));
             if (message != null && message.getMsgType().equals(LOGIN)) {
-                System.out.println(message.toString());
                 if (message.getP1().equals("true")) {
                     new ChatWindow(loginString);
                     dispose();
@@ -75,24 +71,9 @@ public class MainWindow extends JFrame {
             }
         });
 
+        registerButton.addActionListener(e ->
+                register(new JsonMessage(REG, newUsername.getText(), newPassword.getText(), newPasswordRepeat.getText())));
 
-        registerButton.addActionListener(e -> {
-            socketService.register(new JsonMessage(MessageType.REG, newUsername.getText(), newPassword.getText(), newPasswordRepeat.getText()));
-        });
-
-
-    }
-
-    private void setupComponents(){
-        username.setSize(150, 25);
-        password.setSize(150, 25);
-        loginButton.setSize(150, 25);
-
-
-        newUsername.setSize(150, 25);
-        newPassword.setSize(150, 25);
-        newPasswordRepeat.setSize(150, 25);
-        registerButton.setSize(150, 25);
     }
 
 }

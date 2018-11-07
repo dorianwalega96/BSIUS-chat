@@ -58,9 +58,7 @@ public class ChatWindow extends JFrame {
         button3.setText("Refresh");
 
         JsonMessage usersMessage = getUsersList(new JsonMessage(LIST, login, "true"));
-        System.out.println(usersMessage.toString());
         JSONArray jsonArray = new JSONArray(usersMessage.getP1());
-        System.out.println(jsonArray.toString());
 
         for (int i=0;i<jsonArray.length();i++){
             users.addElement(jsonArray.getString(i));
@@ -87,7 +85,6 @@ public class ChatWindow extends JFrame {
             messages.add(message);
             textArea1.append(login + ": " + textField1.getText() + "\n");
             textField1.setText("");
-
         });
 
         button3.addActionListener(e ->
@@ -103,7 +100,6 @@ public class ChatWindow extends JFrame {
         JsonMessage messageReceived = new JsonMessage(message);
         switch(messageReceived.getMsgType()){
             case TEXT:
-                System.out.println(messageReceived.toString());
                 if(!messageReceived.getP2().equals("Succeeded.")) {
                     String sender = messageReceived.getP1();
                     if (sender.equals(recip)) {
@@ -125,7 +121,6 @@ public class ChatWindow extends JFrame {
                 }
                 break;
             case LIST:
-                System.out.println(messageReceived.toString());
                 JSONArray jsonArray = new JSONArray(messageReceived.getP1());
                 System.out.println(jsonArray.toString());
                 users.clear();
@@ -134,7 +129,6 @@ public class ChatWindow extends JFrame {
                 }
                 break;
             case FIND:
-                System.out.println(messageReceived.toString());
                 JSONArray jsonFoundArray = new JSONArray(messageReceived.getP1());
                 System.out.println(jsonFoundArray.toString());
                 foundUsers.clear();
